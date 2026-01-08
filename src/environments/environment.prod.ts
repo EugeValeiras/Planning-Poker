@@ -9,5 +9,5 @@ export const environment = {
     appId: "1:195845415376:web:8d64c71ecca7a4fab2d9d5",
     measurementId: "G-SPVXD8T3RR"
   },
-  appUrl: 'https://planning-poker-15f4e.web.app'
+  appUrl: 'https://planning-poker.eugeniovaleiras.com'
 };
