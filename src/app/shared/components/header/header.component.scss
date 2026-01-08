@@ -9,10 +9,21 @@
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 
-  .app-icon {
-    font-size: 1.75rem;
-    color: var(--primary-color);
+  &:hover {
+    opacity: 0.8;
+  }
+
+  .app-logo {
+    height: 2.5rem;
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover .app-logo {
+    transform: scale(1.05);
   }
 
   .app-name {
@@ -20,11 +31,6 @@
     font-weight: 700;
     color: var(--text-color);
     letter-spacing: -0.5px;
-    
-    &:hover {
-      color: var(--primary-color);
-      transition: color 0.3s ease;
-    }
   }
 }
 
@@ -127,6 +133,10 @@
 
 @media (max-width: 768px) {
   .toolbar-start {
+    .app-logo {
+      height: 2rem;
+    }
+
     .app-name {
       font-size: 1.25rem;
     }
