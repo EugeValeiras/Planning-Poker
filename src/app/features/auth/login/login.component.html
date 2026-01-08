@@ -1,0 +1,102 @@
+<div class="login-container">
+  <div class="login-content">
+    <p-card class="login-card">
+      <ng-template pTemplate="header">
+        <div class="card-header">
+          <i class="pi pi-users" style="font-size: 4rem; color: var(--primary-color);"></i>
+          <h1 class="app-title">Planning Poker</h1>
+          <p class="app-subtitle">Estimación ágil en tiempo real</p>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="content">
+        <div class="login-body">
+          <p class="welcome-text">
+            Inicia sesión para crear salas de votación y colaborar con tu equipo en la estimación de historias de usuario.
+          </p>
+
+          <!-- Login con Google - Botón oficial -->
+          <button 
+            type="button"
+            class="google-signin-button"
+            (click)="signInWithGoogle()"
+            [disabled]="loading"
+          >
+            <div class="google-icon-wrapper">
+              <img 
+                class="google-icon" 
+                src="https://developers.google.com/identity/images/g-logo.png"
+                alt="Google logo"
+              />
+            </div>
+            <span class="google-button-text">
+              <span *ngIf="!loading">Iniciar sesión con Google</span>
+              <span *ngIf="loading">
+                <i class="pi pi-spin pi-spinner"></i>
+                Iniciando sesión...
+              </span>
+            </span>
+          </button>
+
+          <!-- Divider -->
+          <p-divider align="center">
+            <span class="divider-text">O</span>
+          </p-divider>
+
+          <!-- Login como invitado -->
+          <div class="guest-section">
+            <h3 class="guest-title">Entrar como invitado</h3>
+            <form [formGroup]="guestForm" (ngSubmit)="signInAsGuest()" class="guest-form">
+              <div class="field">
+                <label for="guestName" class="field-label">Tu nombre</label>
+                <input 
+                  pInputText 
+                  id="guestName" 
+                  formControlName="guestName"
+                  placeholder="Ej: Juan Pérez"
+                  class="w-full"
+                  [class.ng-invalid]="guestNameControl?.invalid && guestNameControl?.touched"
+                  [class.ng-dirty]="guestNameControl?.touched"
+                />
+                <small 
+                  *ngIf="guestNameControl?.invalid && guestNameControl?.touched" 
+                  class="error-message"
+                >
+                  <span *ngIf="guestNameControl?.errors?.['required']">El nombre es requerido</span>
+                  <span *ngIf="guestNameControl?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+                  <span *ngIf="guestNameControl?.errors?.['maxlength']">El nombre no puede exceder 50 caracteres</span>
+                </small>
+              </div>
+
+              <button 
+                type="submit"
+                class="guest-signin-button"
+                [disabled]="loading || guestForm.invalid"
+              >
+                <div class="guest-icon-wrapper">
+                  <i class="pi pi-user"></i>
+                </div>
+                <span class="guest-button-text">
+                  <span *ngIf="!loading">Entrar como invitado</span>
+                  <span *ngIf="loading">
+                    <i class="pi pi-spin pi-spinner"></i>
+                    Entrando...
+                  </span>
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <div class="card-footer">
+          <p class="footer-text">
+            <i class="pi pi-shield"></i>
+            Tus datos están protegidos y seguros
+          </p>
+        </div>
+      </ng-template>
+    </p-card>
+  </div>
+</div>

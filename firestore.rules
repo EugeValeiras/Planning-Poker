@@ -1,0 +1,91 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Función helper para verificar autenticación
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Función helper para verificar si es el usuario actual
+    function isUser(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Usuarios
+    match /users/{userId} {
+      // Permitir lectura solo al propio usuario
+      allow read: if isUser(userId);
+      // Permitir escritura solo al propio usuario
+      allow create, update: if isUser(userId);
+      // No permitir eliminación
+      allow delete: if false;
+    }
+    
+    // Salas
+    match /rooms/{roomId} {
+      // Cualquier usuario autenticado puede leer salas
+      allow read: if isAuthenticated();
+      // Solo el creador puede crear salas
+      allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
+      // Solo el moderador puede actualizar
+      allow update: if isAuthenticated() && resource.data.moderatorId == request.auth.uid;
+      // Solo el creador puede eliminar
+      allow delete: if isAuthenticated() && resource.data.createdBy == request.auth.uid;
+      
+      // Participantes de una sala
+      match /participants/{participantId} {
+        // Cualquier usuario autenticado puede leer participantes de una sala
+        allow read: if isAuthenticated();
+        // Solo usuarios autenticados pueden agregarse como participantes
+        allow create: if isAuthenticated();
+        // Solo el propio participante o el moderador puede actualizar
+        allow update: if isAuthenticated() && (
+          request.auth.uid == participantId ||
+          get(/databases/$(database)/documents/rooms/$(roomId)).data.moderatorId == request.auth.uid
+        );
+        // Solo el propio participante o el moderador puede eliminarse
+        allow delete: if isAuthenticated() && (
+          request.auth.uid == participantId ||
+          get(/databases/$(database)/documents/rooms/$(roomId)).data.moderatorId == request.auth.uid
+        );
+      }
+      
+      // Historias de una sala
+      match /stories/{storyId} {
+        // Cualquier participante puede leer historias
+        allow read: if isAuthenticated();
+        // Solo el moderador puede crear historias
+        allow create: if isAuthenticated() && get(/databases/$(database)/documents/rooms/$(roomId)).data.moderatorId == request.auth.uid;
+        // Solo el moderador puede actualizar historias
+        allow update: if isAuthenticated() && get(/databases/$(database)/documents/rooms/$(roomId)).data.moderatorId == request.auth.uid;
+        // Solo el moderador puede eliminar historias
+        allow delete: if isAuthenticated() && get(/databases/$(database)/documents/rooms/$(roomId)).data.moderatorId == request.auth.uid;
+        
+        // Votos de una historia
+        match /votes/{voteId} {
+          // Cualquier participante puede leer votos
+          allow read: if isAuthenticated();
+          // Solo el propio usuario puede crear su voto
+          allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+          // Solo el propio usuario puede actualizar su voto
+          allow update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+          // Solo el propio usuario puede eliminar su voto
+          allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+        }
+      }
+      
+      // Chat de una sala
+      match /messages/{messageId} {
+        // Cualquier participante puede leer mensajes
+        allow read: if isAuthenticated();
+        // Solo usuarios autenticados pueden crear mensajes
+        allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+        // No se pueden actualizar mensajes
+        allow update: if false;
+        // Solo el autor puede eliminar su mensaje
+        allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      }
+    }
+  }
+}

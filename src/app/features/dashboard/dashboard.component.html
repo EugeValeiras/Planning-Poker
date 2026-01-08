@@ -1,0 +1,95 @@
+<app-header></app-header>
+
+<div class="dashboard-container">
+  <div class="container">
+    <div class="dashboard-header">
+      <h1>Dashboard</h1>
+      <p>Gestiona tus salas de Planning Poker</p>
+    </div>
+
+    <div class="actions-section">
+      <div class="actions-grid">
+        <button class="action-button create-button" (click)="showCreateDialog()">
+          <i class="pi pi-plus"></i>
+          <span>Crear Nueva Sala</span>
+        </button>
+        
+        <button class="action-button join-button" (click)="showJoinDialog()">
+          <i class="pi pi-sign-in"></i>
+          <span>Unirse a una Sala</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="rooms-section">
+      <h2>Mis Salas Recientes</h2>
+      
+      <!-- Loading Skeleton -->
+      <div *ngIf="loading" class="rooms-grid">
+        <p-card *ngFor="let item of [1,2,3]">
+          <ng-template pTemplate="content">
+            <p-skeleton width="100%" height="2rem" styleClass="mb-3"></p-skeleton>
+            <p-skeleton width="60%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="40%" height="1rem"></p-skeleton>
+          </ng-template>
+        </p-card>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && rooms.length === 0" class="empty-state">
+        <i class="pi pi-inbox"></i>
+        <p>No tienes salas recientes</p>
+        <p class="text-muted">Crea una nueva sala o únete a una existente para empezar</p>
+      </div>
+
+      <!-- Room List -->
+      <div *ngIf="!loading && rooms.length > 0" class="rooms-grid">
+        <p-card *ngFor="let room of rooms" class="room-card">
+          <ng-template pTemplate="header">
+            <div class="room-card-header">
+              <div class="room-name">
+                <i class="pi pi-home"></i>
+                <h3>{{ room.name }}</h3>
+              </div>
+              <span class="room-code">{{ room.roomCode }}</span>
+            </div>
+          </ng-template>
+          
+          <ng-template pTemplate="content">
+            <p class="room-description" *ngIf="room.description">
+              {{ room.description }}
+            </p>
+            <p class="room-description text-muted" *ngIf="!room.description">
+              Sin descripción
+            </p>
+            
+            <div class="room-meta">
+              <span class="meta-item" *ngIf="room.createdBy === authService.getCurrentUser()?.uid">
+                <i class="pi pi-star-fill moderator-icon"></i>
+                Moderador
+              </span>
+              <span class="meta-item">
+                <i class="pi pi-clock"></i>
+                {{ getTimeSince(room.createdAt) }}
+              </span>
+            </div>
+          </ng-template>
+          
+          <ng-template pTemplate="footer">
+            <div class="room-actions">
+              <button class="enter-button" (click)="enterRoom(room.roomCode)">
+                <span>Entrar</span>
+                <i class="pi pi-arrow-right"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialogs -->
+<app-create-room-dialog (roomCreated)="onRoomCreated($event)"></app-create-room-dialog>
+<app-join-room-dialog></app-join-room-dialog>
+<app-share-room-dialog></app-share-room-dialog>

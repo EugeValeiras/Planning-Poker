@@ -1,0 +1,79 @@
+<p-dialog 
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '550px'}"
+  header="Compartir Sala"
+  (onHide)="hide()"
+>
+  <div class="share-content">
+    <!-- Success message -->
+    <div class="success-message">
+      <i class="pi pi-check-circle"></i>
+      <div>
+        <h3>Sala creada exitosamente</h3>
+        <p>Comparte el código o el link con tu equipo para que se unan.</p>
+      </div>
+    </div>
+
+    <!-- Room name -->
+    <div class="room-name">
+      <i class="pi pi-users"></i>
+      <span>{{ roomName }}</span>
+    </div>
+
+    <!-- Room code -->
+    <div class="share-section">
+      <label class="share-label">Código de la sala</label>
+      <div class="copy-container">
+        <div class="code-display">
+          {{ roomCode }}
+        </div>
+        <p-button 
+          [label]="codeCopied ? 'Copiado!' : 'Copiar'"
+          [icon]="codeCopied ? 'pi pi-check' : 'pi pi-copy'"
+          (onClick)="copyCode()"
+          [severity]="codeCopied ? 'success' : 'secondary'"
+          [outlined]="true"
+        ></p-button>
+      </div>
+    </div>
+
+    <!-- Invite link -->
+    <div class="share-section">
+      <label class="share-label">Link de invitación</label>
+      <div class="copy-container">
+        <input 
+          pInputText 
+          [value]="inviteLink"
+          readonly
+          class="link-input"
+        />
+        <p-button 
+          [label]="linkCopied ? 'Copiado!' : 'Copiar'"
+          [icon]="linkCopied ? 'pi pi-check' : 'pi pi-copy'"
+          (onClick)="copyLink()"
+          [severity]="linkCopied ? 'success' : 'secondary'"
+          [outlined]="true"
+        ></p-button>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-box">
+      <i class="pi pi-info-circle"></i>
+      <span>Los participantes pueden usar el código o el link para unirse a la sala en cualquier momento.</span>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <p-button 
+      label="Ir a la sala" 
+      (onClick)="goToRoom()"
+      icon="pi pi-arrow-right"
+      iconPos="right"
+    ></p-button>
+  </div>
+</p-dialog>

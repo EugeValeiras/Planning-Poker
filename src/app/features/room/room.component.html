@@ -1,0 +1,424 @@
+<app-header></app-header>
+
+<!-- Join Room Screen (cuando el usuario NO es participante) -->
+<div class="join-room-container" *ngIf="!loading && !error && room && !isParticipant">
+  <!-- Loading Overlay mientras se verifica participante -->
+  <div class="join-room-loading-overlay" *ngIf="checkingParticipant">
+    <div class="loading-content">
+      <i class="pi pi-spin pi-spinner"></i>
+      <p>Verificando acceso...</p>
+    </div>
+  </div>
+
+  <div class="join-room-content">
+    <div class="join-room-card">
+      <div class="join-room-icon">
+        <i class="pi pi-users"></i>
+      </div>
+      <h1 class="join-room-title">{{ room.name }}</h1>
+      <p class="join-room-description" *ngIf="room.description">{{ room.description }}</p>
+      
+      <div class="join-room-info">
+        <div class="info-badge">
+          <i class="pi pi-hashtag"></i>
+          <span>{{ roomCode }}</span>
+        </div>
+        <div class="info-badge">
+          <i class="pi pi-users"></i>
+          <span>{{ participants.length }} participantes</span>
+        </div>
+      </div>
+
+      <p class="join-room-text">
+        ¿Quieres unirte a esta sesión de Planning Poker?
+      </p>
+
+      <div class="join-room-actions">
+        <button class="join-btn" (click)="joinRoom()" [disabled]="joiningRoom">
+          <i class="pi" [class.pi-spin]="joiningRoom" [class.pi-spinner]="joiningRoom" [class.pi-sign-in]="!joiningRoom"></i>
+          <span>{{ joiningRoom ? 'Uniéndose...' : 'Unirse a la sala' }}</span>
+        </button>
+        <button class="back-btn" (click)="leaveRoom()" [disabled]="joiningRoom">
+          <i class="pi pi-arrow-left"></i>
+          <span>Volver al Dashboard</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Room Main Content (cuando el usuario ES participante) -->
+<div class="room-container" *ngIf="!loading && !error && room && isParticipant">
+  <!-- Room Header -->
+  <div class="room-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="room-info">
+          <div class="room-title-section">
+            <h1 class="room-title">{{ room.name }}</h1>
+            <div class="room-code-badge" (click)="copyRoomCode()" pTooltip="Click para copiar enlace de la sala" tooltipPosition="bottom">
+              <i class="pi pi-link"></i>
+              <span>{{ roomCode }}</span>
+              <i class="pi pi-copy copy-icon"></i>
+            </div>
+          </div>
+          <p class="room-description" *ngIf="room.description">{{ room.description }}</p>
+        </div>
+        
+        <div class="room-actions">
+          <!-- Sound Toggle (para todos) -->
+          <button 
+            class="action-icon-btn sound-btn" 
+            (click)="toggleSound()"
+            [pTooltip]="isSoundEnabled ? 'Silenciar' : 'Activar sonido'"
+            tooltipPosition="bottom">
+            <i class="pi" [class.pi-volume-up]="isSoundEnabled" [class.pi-volume-off]="!isSoundEnabled"></i>
+          </button>
+
+          <!-- Moderator Actions (solo para moderador) -->
+          <div class="moderator-actions" *ngIf="isModerator">
+            <button 
+              class="action-icon-btn start-btn" 
+              *ngIf="!room.isVotingActive" 
+              (click)="startVoting()"
+              pTooltip="Iniciar Votación"
+              tooltipPosition="bottom">
+              <i class="pi pi-play"></i>
+            </button>
+            
+            <button 
+              class="action-icon-btn reveal-btn" 
+              *ngIf="room.isVotingActive && !room.votesRevealed" 
+              (click)="revealVotes()"
+              pTooltip="Revelar Votos"
+              tooltipPosition="bottom">
+              <i class="pi pi-eye"></i>
+            </button>
+            
+            <button 
+              class="action-icon-btn new-round-btn" 
+              *ngIf="room.votesRevealed" 
+              (click)="newRound()"
+              pTooltip="Nueva Ronda"
+              tooltipPosition="bottom">
+              <i class="pi pi-refresh"></i>
+            </button>
+            
+            <button 
+              class="action-icon-btn cancel-btn" 
+              *ngIf="room.isVotingActive" 
+              (click)="cancelVoting()"
+              pTooltip="Cancelar Votación"
+              tooltipPosition="bottom">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          <button class="action-btn leave-btn" (click)="leaveRoom()">
+            <i class="pi pi-sign-out"></i>
+            <span>Salir</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="room-layout">
+      
+      <!-- Left Sidebar - Participants -->
+      <aside class="participants-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-header">
+            <div class="header-title">
+              <i class="pi pi-users"></i>
+              <h3>Participantes</h3>
+            </div>
+            <span class="participants-count">{{ participants.length }}</span>
+          </div>
+
+          <div class="participants-list">
+            <!-- Votantes -->
+            <div class="participants-section" *ngIf="voters.length > 0">
+              <div class="section-label">
+                <i class="pi pi-user"></i>
+                <span>Votantes ({{ voters.length }})</span>
+              </div>
+              <div class="participant-item" 
+                   *ngFor="let participant of voters"
+                   [class.can-kick]="isModerator && participant.userId !== currentUserId"
+                   [pTooltip]="isModerator && participant.userId !== currentUserId ? 'Expulsar participante' : ''"
+                   tooltipPosition="left"
+                   (click)="isModerator && participant.userId !== currentUserId ? kickParticipant(participant) : null">
+                <p-avatar 
+                  [image]="participant.photoURL || undefined"
+                  [label]="!participant.photoURL ? participant.displayName.charAt(0).toUpperCase() : undefined"
+                  shape="circle"
+                  size="large"
+                  [style]="{'background-color': participant.role === 'moderator' ? '#fbbf24' : '#3b82f6', 'color': 'white'}"
+                ></p-avatar>
+                <div class="participant-info">
+                  <div class="participant-name">
+                    <span>{{ participant.displayName }}</span>
+                    <i *ngIf="participant.role === 'moderator'" 
+                       class="pi pi-star-fill moderator-star" 
+                       pTooltip="Moderador"></i>
+                  </div>
+                  <span class="participant-status" [class.online]="participant.isOnline">
+                    <i class="pi pi-circle-fill"></i>
+                    {{ participant.isOnline ? 'En línea' : 'Desconectado' }}
+                  </span>
+                </div>
+                <div class="participant-vote-status">
+                  <!-- Check/Reloj (se muestran siempre) -->
+                  <i *ngIf="participant.hasVoted && room.isVotingActive && !room.votesRevealed" 
+                     class="pi pi-check-circle vote-check vote-icon" 
+                     pTooltip="Ha votado"
+                     tooltipPosition="left"></i>
+                  <i *ngIf="!participant.hasVoted && room.isVotingActive" 
+                     class="pi pi-clock vote-pending vote-icon"
+                     pTooltip="Esperando voto"
+                     tooltipPosition="left"></i>
+                  <!-- Botón de expulsar (aparece al hover si es moderador) -->
+                  <i *ngIf="isModerator && participant.userId !== currentUserId"
+                     class="pi pi-times kick-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Observadores -->
+            <div class="participants-section" *ngIf="observers.length > 0">
+              <div class="section-label">
+                <i class="pi pi-eye"></i>
+                <span>Observadores ({{ observers.length }})</span>
+              </div>
+              <div class="participant-item" 
+                   *ngFor="let participant of observers"
+                   [class.can-kick]="isModerator && participant.userId !== currentUserId"
+                   [pTooltip]="isModerator && participant.userId !== currentUserId ? 'Expulsar participante' : ''"
+                   tooltipPosition="left"
+                   (click)="isModerator && participant.userId !== currentUserId ? kickParticipant(participant) : null">
+                <p-avatar 
+                  [image]="participant.photoURL || undefined"
+                  [label]="!participant.photoURL ? participant.displayName.charAt(0).toUpperCase() : undefined"
+                  shape="circle"
+                  [style]="{'background-color': '#6b7280', 'color': 'white'}"
+                ></p-avatar>
+                <div class="participant-info">
+                  <div class="participant-name">
+                    <span>{{ participant.displayName }}</span>
+                  </div>
+                  <span class="participant-status" [class.online]="participant.isOnline">
+                    <i class="pi pi-circle-fill"></i>
+                    {{ participant.isOnline ? 'En línea' : 'Desconectado' }}
+                  </span>
+                </div>
+                <!-- Botón de expulsar (solo para moderador, aparece al hover) -->
+                <div class="participant-actions">
+                  <i *ngIf="isModerator && participant.userId !== currentUserId"
+                     class="pi pi-times kick-icon"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty state -->
+            <div class="empty-participants" *ngIf="participants.length === 0">
+              <i class="pi pi-users"></i>
+              <p>No hay participantes</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Content - Voting Area -->
+      <main class="voting-area">
+        
+        <!-- Voting Cards -->
+        <div class="voting-section" [class.active]="room.isVotingActive" [class.revealed]="room.votesRevealed">
+          <!-- Loading Overlay -->
+          <div class="voting-loading-overlay" *ngIf="actionLoading">
+            <div class="loading-content">
+              <i class="pi pi-spin pi-spinner"></i>
+              <p>{{ actionLoadingMessage }}</p>
+            </div>
+          </div>
+
+          <!-- Section Header with Status -->
+          <div class="section-header">
+            <div class="header-content">
+              <i class="header-icon" 
+                 [class]="room.isVotingActive ? (room.votesRevealed ? 'pi pi-eye' : 'pi pi-hourglass') : 'pi pi-pause-circle'"></i>
+              <div class="header-text">
+                <h2 *ngIf="!room.isVotingActive">Votación no iniciada</h2>
+                <h2 *ngIf="room.isVotingActive && !room.votesRevealed">Votación en progreso</h2>
+                <h2 *ngIf="room.votesRevealed">Votos revelados</h2>
+                <p *ngIf="!room.isVotingActive">El moderador iniciará la votación pronto</p>
+                <p *ngIf="room.isVotingActive && !room.votesRevealed">
+                  {{ votersWhoVoted }} de {{ totalVoters }} han votado
+                </p>
+                <p *ngIf="room.votesRevealed">Revisa los resultados abajo</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="voting-cards-grid" 
+               [class.disabled]="!room.isVotingActive || currentParticipant?.role === 'observer'">
+            <div class="voting-card" 
+                 *ngFor="let card of votingCards"
+                 [class.selected]="selectedVote === card"
+                 [class.disabled]="!room.isVotingActive || currentParticipant?.role === 'observer'"
+                 [class.has-votes]="room.votesRevealed && cardHasVotes(card)"
+                 (click)="vote(card)">
+              <div class="card-value">{{ card }}</div>
+              
+              <!-- Avatares cuando los votos están revelados -->
+              <div class="card-avatars" *ngIf="room.votesRevealed && cardHasVotes(card)">
+                <p-avatar 
+                  *ngFor="let vote of getVotesForCard(card)"
+                  [image]="vote.userPhoto || undefined"
+                  [label]="!vote.userPhoto ? vote.userName.charAt(0).toUpperCase() : undefined"
+                  shape="circle"
+                  size="normal"
+                  [pTooltip]="vote.userName"
+                  [style]="{'background-color': '#3b82f6', 'color': 'white'}"
+                ></p-avatar>
+              </div>
+            </div>
+          </div>
+
+          <div class="voting-info" *ngIf="!room.isVotingActive">
+            <i class="pi pi-info-circle"></i>
+            <span>Esperando a que el moderador inicie la votación</span>
+          </div>
+
+          <div class="voting-info warning" *ngIf="currentParticipant?.role === 'observer'">
+            <i class="pi pi-eye"></i>
+            <span>Eres observador. No puedes votar en esta sesión.</span>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Right Sidebar - Quick Info -->
+      <aside class="info-sidebar">
+        <div class="sidebar-card">
+          <div class="info-item">
+            <i class="pi pi-chart-bar"></i>
+            <div class="info-content">
+              <span class="info-label">Escala de votación</span>
+              <span class="info-value">Fibonacci</span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+          <div class="info-item">
+            <i class="pi pi-users"></i>
+            <div class="info-content">
+              <span class="info-label">Total participantes</span>
+              <span class="info-value">{{ participants.length }}</span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+          <div class="info-item">
+            <i class="pi pi-check-circle"></i>
+            <div class="info-content">
+              <span class="info-label">Han votado</span>
+              <span class="info-value">{{ votersWhoVoted }} / {{ totalVoters }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Voting Statistics (solo cuando los votos están revelados) -->
+        <div class="sidebar-card statistics-card" *ngIf="room.votesRevealed && currentStory?.statistics && (currentStory?.statistics?.totalVotes || 0) > 0">
+          <!-- Consenso (si existe) -->
+          <div class="consensus-banner" *ngIf="currentStory?.estimateConsensus">
+            <i class="pi pi-check-circle"></i>
+            <div class="consensus-content">
+              <span class="consensus-label">Consenso alcanzado</span>
+              <span class="consensus-value">{{ currentStory?.finalEstimate }}</span>
+            </div>
+          </div>
+
+          <p-divider *ngIf="currentStory?.estimateConsensus"></p-divider>
+
+          <!-- Métricas -->
+          <div class="info-item">
+            <i class="pi pi-calculator metric-icon average"></i>
+            <div class="info-content">
+              <span class="info-label">Promedio</span>
+              <span class="info-value">
+                {{ currentStory?.statistics?.average !== null ? currentStory?.statistics?.average : 'N/A' }}
+              </span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+
+          <div class="info-item">
+            <i class="pi pi-star-fill metric-icon mode"></i>
+            <div class="info-content">
+              <span class="info-label">Más votado</span>
+              <span class="info-value">
+                {{ currentStory?.statistics?.mode || 'N/A' }}
+              </span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+
+          <div class="info-item">
+            <i class="pi pi-arrow-down metric-icon min"></i>
+            <div class="info-content">
+              <span class="info-label">Mínimo</span>
+              <span class="info-value">
+                {{ currentStory?.statistics?.min || 'N/A' }}
+              </span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+
+          <div class="info-item">
+            <i class="pi pi-arrow-up metric-icon max"></i>
+            <div class="info-content">
+              <span class="info-label">Máximo</span>
+              <span class="info-value">
+                {{ currentStory?.statistics?.max || 'N/A' }}
+              </span>
+            </div>
+          </div>
+          <p-divider></p-divider>
+
+          <div class="info-item">
+            <i class="pi pi-users metric-icon total"></i>
+            <div class="info-content">
+              <span class="info-label">Total votos</span>
+              <span class="info-value">
+                {{ currentStory?.statistics?.totalVotes }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading">
+  <div class="loading-spinner">
+    <i class="pi pi-spin pi-spinner"></i>
+    <p>Cargando sala...</p>
+  </div>
+</div>
+
+<!-- Error State -->
+<div class="error-container" *ngIf="error && !loading">
+  <div class="error-content">
+    <i class="pi pi-exclamation-triangle"></i>
+    <h2>Sala no encontrada</h2>
+    <p>El código de sala "{{ roomCode }}" no existe o ya no está disponible.</p>
+    <button class="back-btn" (click)="leaveRoom()">
+      <i class="pi pi-arrow-left"></i>
+      <span>Volver al Dashboard</span>
+    </button>
+  </div>
+</div>

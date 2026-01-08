@@ -1,0 +1,30 @@
+<p-toolbar styleClass="header-toolbar">
+  <ng-template pTemplate="start">
+    <div class="toolbar-start">
+      <i class="pi pi-users app-icon"></i>
+      <span class="app-name" (click)="goToDashboard()">Planning Poker</span>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="end">
+    <div class="toolbar-end" *ngIf="user$ | async as user">
+      <span class="user-name hide-mobile">{{ user.displayName }}</span>
+      <p-avatar 
+        [image]="user.photoURL || undefined" 
+        [label]="!user.photoURL ? (user.displayName?.charAt(0) || 'U') : undefined"
+        shape="circle"
+        size="normal"
+        styleClass="user-avatar"
+      ></p-avatar>
+      <p-button 
+        icon="pi pi-sign-out" 
+        (onClick)="signOut()"
+        [text]="true"
+        [rounded]="true"
+        severity="secondary"
+        pTooltip="Cerrar sesión"
+        tooltipPosition="bottom"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-toolbar>

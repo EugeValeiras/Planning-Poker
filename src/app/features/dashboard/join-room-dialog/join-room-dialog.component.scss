@@ -1,0 +1,184 @@
+// Estilos globales del diálogo
+::ng-deep .p-dialog {
+  .p-dialog-header {
+    background: var(--surface-card);
+    border-bottom: 1px solid var(--surface-border);
+    padding: 1.5rem;
+
+    .p-dialog-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .p-dialog-header-icons {
+      .p-dialog-header-icon {
+        color: var(--text-color-secondary);
+        
+        &:hover {
+          color: var(--text-color);
+          background: var(--surface-hover);
+        }
+      }
+    }
+  }
+
+  .p-dialog-content {
+    background: var(--surface-card);
+    color: var(--text-color);
+    padding: 1.5rem;
+  }
+}
+
+.form-content {
+  .field {
+    margin-bottom: 1.75rem;
+
+    .field-label {
+      display: block;
+      margin-bottom: 0.65rem;
+      color: var(--text-color);
+      font-weight: 600;
+      font-size: 1rem;
+
+      .required {
+        color: #ef4444;
+        margin-left: 0.2rem;
+      }
+    }
+
+    .code-input {
+      font-size: 1.75rem !important;
+      font-weight: 700 !important;
+      letter-spacing: 0.5rem !important;
+      text-align: center !important;
+      text-transform: uppercase !important;
+      font-family: 'Courier New', Courier, monospace !important;
+      padding: 1rem !important;
+      background: var(--surface-ground) !important;
+      border: 2px solid var(--surface-border) !important;
+      
+      &:focus {
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.2) !important;
+      }
+    }
+
+    ::ng-deep input.p-inputtext {
+      width: 100%;
+      background: var(--surface-ground);
+      border: 1px solid var(--surface-border);
+      color: var(--text-color);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:enabled:hover {
+        border-color: var(--primary-color);
+      }
+
+      &:enabled:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.2);
+      }
+
+      &::placeholder {
+        color: var(--text-color-secondary);
+        opacity: 0.6;
+      }
+      
+      &.ng-invalid.ng-touched {
+        border-color: #ef4444;
+        
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.2);
+        }
+      }
+    }
+
+    .error-message {
+      display: block;
+      color: #ef4444;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      font-weight: 500;
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &::before {
+          content: '⚠';
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .info-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1.25rem;
+    background: rgba(59, 130, 246, 0.08);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+
+    i {
+      color: var(--primary-color);
+      font-size: 1.25rem;
+      margin-top: 0.15rem;
+      flex-shrink: 0;
+    }
+
+    span {
+      color: var(--text-color);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+  }
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.875rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--surface-border);
+  margin-top: 1.5rem;
+
+  ::ng-deep .p-button {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &.p-button-text {
+      color: var(--text-color-secondary);
+
+      &:enabled:hover {
+        background: var(--surface-hover);
+        color: var(--text-color);
+      }
+    }
+
+    &:not(.p-button-text) {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border: none;
+
+      &:enabled:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      &:enabled:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}

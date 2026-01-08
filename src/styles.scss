@@ -1,0 +1,200 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Variables de tema personalizadas para Lara Dark */
+:root {
+  --primary-color: #3B82F6;
+  --primary-color-text: #ffffff;
+  --surface-ground: #1e1e1e;
+  --surface-section: #2a2a2a;
+  --surface-card: #2a2a2a;
+  --text-color: #e0e0e0;
+  --text-color-secondary: #a0a0a0;
+  --border-radius: 6px;
+}
+
+/* Reset y estilos globales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--surface-ground);
+  color: var(--text-color);
+}
+
+/* Animaciones para cartas de Planning Poker */
+.poker-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  
+  &:hover:not(.disabled) {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+  }
+  
+  &.selected {
+    border: 3px solid var(--primary-color);
+    transform: translateY(-15px) scale(1.08);
+    box-shadow: 0 12px 32px rgba(59, 130, 246, 0.5);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Indicador de presencia */
+.presence-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+  
+  &.online {
+    background-color: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: pulse 2s infinite;
+  }
+  
+  &.offline {
+    background-color: #6b7280;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Badge de rol */
+.role-badge {
+  &.moderator {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  }
+  
+  &.voter {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  }
+  
+  &.observer {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  }
+}
+
+/* Indicador de voto enviado */
+.vote-indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #10b981;
+  color: white;
+  font-size: 14px;
+  
+  i {
+    font-size: 12px;
+  }
+}
+
+/* Estilos para estados de historias */
+.story-status {
+  &.pending {
+    color: #9ca3af;
+    background-color: rgba(156, 163, 175, 0.1);
+  }
+  
+  &.voting {
+    color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+    animation: pulse-voting 1.5s infinite;
+  }
+  
+  &.completed {
+    color: #10b981;
+    background-color: rgba(16, 185, 129, 0.1);
+  }
+}
+
+@keyframes pulse-voting {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-ground);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Layout responsive helpers */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Utilidades */
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.justify-center { justify-content: center; }
+.align-center { align-items: center; }
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .show-mobile {
+    display: none !important;
+  }
+}

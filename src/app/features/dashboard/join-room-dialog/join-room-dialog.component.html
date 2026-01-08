@@ -1,0 +1,65 @@
+<p-dialog 
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{width: '450px'}"
+  header="Unirse a una Sala"
+  (onHide)="hide()"
+>
+  <form [formGroup]="joinForm" (ngSubmit)="onSubmit()">
+    <div class="form-content">
+      <!-- Código de sala -->
+      <div class="field">
+        <label for="roomCode" class="field-label">
+          Código de la sala <span class="required">*</span>
+        </label>
+        <input 
+          pInputText 
+          id="roomCode" 
+          formControlName="roomCode"
+          placeholder="ABC123"
+          (input)="onCodeInput($event)"
+          maxlength="6"
+          class="w-full code-input"
+          [class.ng-invalid]="roomCodeControl?.invalid && roomCodeControl?.touched"
+          autocomplete="off"
+        />
+        <small 
+          *ngIf="roomCodeControl?.invalid && roomCodeControl?.touched" 
+          class="error-message"
+        >
+          <span *ngIf="roomCodeControl?.errors?.['required']">El código es requerido</span>
+          <span *ngIf="roomCodeControl?.errors?.['pattern']">El código debe tener 6 caracteres alfanuméricos</span>
+        </small>
+        <small *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </small>
+      </div>
+
+      <!-- Info -->
+      <div class="info-box">
+        <i class="pi pi-info-circle"></i>
+        <span>Ingresa el código de 6 caracteres que te compartió el organizador de la sala.</span>
+      </div>
+    </div>
+
+    <!-- Footer con botones -->
+    <div class="dialog-footer">
+      <p-button 
+        label="Cancelar" 
+        (onClick)="hide()"
+        [text]="true"
+        severity="secondary"
+        [disabled]="loading"
+      ></p-button>
+      <p-button 
+        label="Unirse" 
+        type="submit"
+        icon="pi pi-sign-in"
+        [loading]="loading"
+        [disabled]="loading"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>
