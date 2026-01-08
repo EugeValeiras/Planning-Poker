@@ -8,13 +8,46 @@
 
   <ng-template pTemplate="end">
     <div class="toolbar-end" *ngIf="user$ | async as user">
-      <span class="user-name hide-mobile">{{ user.displayName }}</span>
+      <!-- Botón de tema (dark/light) -->
+      <button 
+        class="theme-toggle-btn"
+        (click)="toggleTheme()"
+        [pTooltip]="isDarkMode ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+        tooltipPosition="bottom">
+        <i class="pi" [class.pi-sun]="isDarkMode" [class.pi-moon]="!isDarkMode"></i>
+      </button>
+      
+      <!-- Botón de color con menú -->
+      <button 
+        class="color-picker-btn"
+        (click)="colorMenu.toggle($event)"
+        pTooltip="Cambiar color"
+        tooltipPosition="bottom">
+        <i class="pi pi-palette"></i>
+      </button>
+      
+      <p-menu #colorMenu [model]="colorMenuItems" [popup]="true" styleClass="color-menu">
+        <ng-template pTemplate="item" let-item>
+          <div class="color-menu-item" (click)="setColor(item.data)">
+            <span 
+              class="color-circle" 
+              [style.background]="getColorPalette(item.data).primary"
+              [class.selected]="currentColor === item.data">
+              <i class="pi pi-check" *ngIf="currentColor === item.data"></i>
+            </span>
+            <span class="color-name">{{ item.label }}</span>
+          </div>
+        </ng-template>
+      </p-menu>
+      
       <p-avatar 
         [image]="user.photoURL || undefined" 
         [label]="!user.photoURL ? (user.displayName?.charAt(0) || 'U') : undefined"
         shape="circle"
         size="normal"
         styleClass="user-avatar"
+        [pTooltip]="user.displayName || 'Usuario'"
+        tooltipPosition="bottom"
       ></p-avatar>
       <p-button 
         icon="pi pi-sign-out" 

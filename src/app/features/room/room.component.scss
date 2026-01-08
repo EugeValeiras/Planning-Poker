@@ -7,10 +7,10 @@
 // ROOM HEADER
 // ==========================================
 .room-header {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  background: var(--bg-gradient-dark);
   border-bottom: 1px solid var(--surface-border);
   padding: 2rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--card-shadow);
 
   .header-content {
     display: flex;
@@ -35,7 +35,7 @@
   .room-title {
     font-size: 2rem;
     font-weight: 800;
-    color: white;
+    color: var(--header-title-color);
     margin: 0;
   }
 
@@ -43,7 +43,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-weight: 700;
@@ -71,7 +71,7 @@
     }
 
     &.copied {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(135deg, var(--success-color) 0%, var(--success-color-dark) 100%);
       transform: scale(1.05);
       box-shadow: 0 4px 16px rgba(16, 185, 129, 0.5);
       animation: pulse-copy 0.5s ease;
@@ -86,7 +86,7 @@
         top: -2.5rem;
         left: 50%;
         transform: translateX(-50%);
-        background: #10b981;
+        background: var(--success-color);
         color: white;
         padding: 0.5rem 1rem;
         border-radius: 6px;
@@ -102,7 +102,7 @@
   }
 
   .room-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--header-description-color);
     font-size: 1rem;
     margin: 0;
     line-height: 1.6;
@@ -119,7 +119,7 @@
     align-items: center;
     gap: 0.75rem;
     padding-right: 1rem;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid var(--header-border-color);
   }
 
   .action-icon-btn {
@@ -144,7 +144,7 @@
     }
 
     &.start-btn {
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 
       &:hover {
@@ -153,7 +153,7 @@
     }
 
     &.reveal-btn {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(135deg, var(--success-color) 0%, var(--success-color-dark) 100%);
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 
       &:hover {
@@ -162,7 +162,7 @@
     }
 
     &.new-round-btn {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, var(--purple-color) 0%, var(--purple-color-dark) 100%);
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 
       &:hover {
@@ -171,7 +171,7 @@
     }
 
     &.cancel-btn {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      background: linear-gradient(135deg, var(--danger-color) 0%, var(--danger-color-dark) 100%);
       box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 
       &:hover {
@@ -180,17 +180,18 @@
     }
 
     &.sound-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      background: var(--header-btn-bg);
+      border: 1px solid var(--header-btn-border);
+      box-shadow: 0 2px 8px var(--shadow-color);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.15);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        background: var(--header-btn-hover-bg);
+        box-shadow: 0 4px 12px var(--shadow-color);
       }
 
       i {
         font-size: 1.1rem;
+        color: var(--header-icon-color);
       }
     }
   }
@@ -209,7 +210,7 @@
 
     &.leave-btn {
       background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
+      color: var(--danger-text);
       border: 1px solid rgba(239, 68, 68, 0.3);
 
       &:hover {
@@ -351,7 +352,7 @@
     }
 
     .moderator-star {
-      color: #fbbf24;
+      color: var(--yellow-color);
       font-size: 0.875rem;
       flex-shrink: 0;
     }
@@ -366,11 +367,11 @@
 
     i {
       font-size: 0.5rem;
-      color: #6b7280;
+      color: var(--gray-color);
     }
 
     &.online i {
-      color: #10b981;
+      color: var(--success-text);
     }
   }
 
@@ -384,13 +385,13 @@
     cursor: pointer;
 
     .vote-check {
-      color: #10b981;
+      color: var(--success-text);
       font-size: 1.25rem;
       transition: opacity 0.2s ease;
     }
 
     .vote-pending {
-      color: #f59e0b;
+      color: var(--warning-text);
       font-size: 1.25rem;
       animation: pulse 2s ease-in-out infinite;
       transition: opacity 0.2s ease;
@@ -407,7 +408,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 1.25rem;
-      color: #ef4444;
+      color: var(--danger-text);
       opacity: 0;
       transition: opacity 0.2s ease;
       z-index: 2;
@@ -425,7 +426,7 @@
 
     .kick-icon {
       font-size: 1.25rem;
-      color: #ef4444;
+      color: var(--danger-text);
       opacity: 0;
       transition: opacity 0.2s ease;
       pointer-events: none;
@@ -483,12 +484,12 @@
   transition: all 0.3s ease;
 
   &.active {
-    border-color: #3b82f6;
+    border-color: var(--primary-color);
     box-shadow: 0 0 24px rgba(59, 130, 246, 0.2);
   }
 
   &.revealed {
-    border-color: #10b981;
+    border-color: var(--success-text);
     box-shadow: 0 0 24px rgba(16, 185, 129, 0.2);
   }
 
@@ -533,7 +534,7 @@
       border-bottom-color: rgba(59, 130, 246, 0.3);
 
       .header-icon {
-        color: #3b82f6;
+        color: var(--primary-color);
       }
     }
   }
@@ -543,7 +544,7 @@
       border-bottom-color: rgba(16, 185, 129, 0.3);
 
       .header-icon {
-        color: #10b981;
+        color: var(--success-text);
       }
     }
   }
@@ -581,7 +582,7 @@
 
   .voting-card {
     aspect-ratio: 2/3;
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    background: linear-gradient(135deg, var(--primary-color-dark) 0%, var(--primary-color-darker) 100%);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
@@ -638,7 +639,7 @@
     }
 
     &.has-votes {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, var(--purple-color) 0%, var(--purple-color-dark) 100%);
       box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
       
       .card-value {
@@ -656,7 +657,7 @@
     }
 
     &.selected {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(135deg, var(--success-color) 0%, var(--success-color-dark) 100%);
       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
       transform: translateY(-4px);
 
@@ -666,7 +667,7 @@
         top: 0.5rem;
         right: 0.5rem;
         background: white;
-        color: #10b981;
+        color: var(--success-text);
         width: 1.5rem;
         height: 1.5rem;
         border-radius: 50%;
@@ -691,31 +692,31 @@
     gap: 0.75rem;
     padding: 1rem 1.25rem;
     background: rgba(59, 130, 246, 0.1);
-    border-left: 4px solid #3b82f6;
+    border-left: 4px solid var(--primary-color);
     border-radius: 8px;
     color: var(--text-color);
     font-size: 0.95rem;
 
     i {
-      color: #3b82f6;
+      color: var(--primary-color);
       font-size: 1.25rem;
     }
 
     &.success {
       background: rgba(16, 185, 129, 0.1);
-      border-left-color: #10b981;
+      border-left-color: var(--success-text);
 
       i {
-        color: #10b981;
+        color: var(--success-text);
       }
     }
 
     &.warning {
       background: rgba(245, 158, 11, 0.1);
-      border-left-color: #f59e0b;
+      border-left-color: var(--warning-text);
 
       i {
-        color: #f59e0b;
+        color: var(--warning-text);
       }
     }
   }
@@ -1012,7 +1013,7 @@
 
   i {
     font-size: 4rem;
-    color: #ef4444;
+    color: var(--danger-text);
     margin-bottom: 1.5rem;
   }
 
@@ -1069,7 +1070,7 @@
 
     i {
       font-size: 1.5rem;
-      color: #10b981;
+      color: var(--success-text);
     }
 
     .consensus-content {
@@ -1087,7 +1088,7 @@
       .consensus-value {
         font-size: 1.5rem;
         font-weight: 800;
-        color: #10b981;
+        color: var(--success-text);
         line-height: 1;
       }
     }

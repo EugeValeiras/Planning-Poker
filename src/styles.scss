@@ -1,15 +1,187 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Variables de tema personalizadas para Lara Dark */
+/* Variables de tema personalizadas - DARK MODE (default) */
+body[data-theme="dark"] {
+  /* Colores primarios - Se aplican dinámicamente vía JavaScript */
+  /* --primary-color: #3B82F6; */
+  /* --primary-color-dark: #2563eb; */
+  /* --primary-color-darker: #1d4ed8; */
+  --primary-color-text: #ffffff;
+  
+  /* Superficies */
+  --surface-ground: #1e1e1e;
+  --surface-section: #2a2a2a;
+  --surface-card: #2a2a2a;
+  --surface-hover: #3a3a3a;
+  --surface-border: #3f3f46;
+  
+  /* Textos */
+  --text-color: #e0e0e0;
+  --text-color-secondary: #a0a0a0;
+  
+  /* Estados - Success (Verde) */
+  --success-color: #10b981;
+  --success-color-dark: #059669;
+  --success-text: #10b981;
+  
+  /* Estados - Warning (Naranja/Amarillo) */
+  --warning-color: #f59e0b;
+  --warning-color-dark: #d97706;
+  --warning-text: #f59e0b;
+  
+  /* Estados - Danger/Error (Rojo) */
+  --danger-color: #ef4444;
+  --danger-color-dark: #dc2626;
+  --danger-text: #ef4444;
+  
+  /* Otros colores */
+  --purple-color: #8b5cf6;
+  --purple-color-dark: #7c3aed;
+  --yellow-color: #fbbf24;
+  --gray-color: #6b7280;
+  
+  /* Background gradients */
+  --bg-gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --bg-gradient-page: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+  
+  /* Login específicos */
+  --login-card-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --login-footer-bg: rgba(59, 130, 246, 0.05);
+  --login-footer-border: rgba(59, 130, 246, 0.1);
+  --google-btn-bg: linear-gradient(135deg, #1e293b, #334155);
+  --google-btn-bg-hover: linear-gradient(135deg, #334155, #475569);
+  --google-btn-border: #475569;
+  --google-btn-text: #f1f5f9;
+  
+  /* Textos especiales */
+  --header-title-color: #ffffff;
+  --header-description-color: rgba(255, 255, 255, 0.8);
+  --header-border-color: rgba(255, 255, 255, 0.1);
+  --header-btn-bg: rgba(255, 255, 255, 0.1);
+  --header-btn-border: rgba(255, 255, 255, 0.2);
+  --header-btn-hover-bg: rgba(255, 255, 255, 0.15);
+  --header-icon-color: #ffffff;
+  
+  /* Sombras y efectos */
+  --border-radius: 6px;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Variables de tema personalizadas - LIGHT MODE */
+body[data-theme="light"] {
+  /* Colores primarios - Se aplican dinámicamente vía JavaScript */
+  /* --primary-color: #3B82F6; */
+  /* --primary-color-dark: #2563eb; */
+  /* --primary-color-darker: #1d4ed8; */
+  --primary-color-text: #ffffff;
+  
+  /* Superficies */
+  --surface-ground: #f8fafc;
+  --surface-section: #ffffff;
+  --surface-card: #ffffff;
+  --surface-hover: #f1f5f9;
+  --surface-border: #e2e8f0;
+  
+  /* Textos */
+  --text-color: #1e293b;
+  --text-color-secondary: #64748b;
+  
+  /* Estados - Success (Verde) */
+  --success-color: #10b981;
+  --success-color-dark: #059669;
+  --success-text: #059669;
+  
+  /* Estados - Warning (Naranja/Amarillo) */
+  --warning-color: #f59e0b;
+  --warning-color-dark: #d97706;
+  --warning-text: #d97706;
+  
+  /* Estados - Danger/Error (Rojo) */
+  --danger-color: #ef4444;
+  --danger-color-dark: #dc2626;
+  --danger-text: #dc2626;
+  
+  /* Otros colores */
+  --purple-color: #8b5cf6;
+  --purple-color-dark: #7c3aed;
+  --yellow-color: #f59e0b;
+  --gray-color: #94a3b8;
+  
+  /* Background gradients */
+  --bg-gradient-dark: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  --bg-gradient-page: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  
+  /* Login específicos */
+  --login-card-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  --login-footer-bg: rgba(59, 130, 246, 0.03);
+  --login-footer-border: rgba(59, 130, 246, 0.1);
+  --google-btn-bg: linear-gradient(135deg, #ffffff, #f8fafc);
+  --google-btn-bg-hover: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  --google-btn-border: #cbd5e1;
+  --google-btn-text: #334155;
+  
+  /* Textos especiales */
+  --header-title-color: #0f172a;
+  --header-description-color: rgba(15, 23, 42, 0.7);
+  --header-border-color: rgba(15, 23, 42, 0.1);
+  --header-btn-bg: rgba(15, 23, 42, 0.05);
+  --header-btn-border: rgba(15, 23, 42, 0.15);
+  --header-btn-hover-bg: rgba(15, 23, 42, 0.1);
+  --header-icon-color: #0f172a;
+  
+  /* Sombras y efectos */
+  --border-radius: 6px;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Fallback para cuando no hay atributo data-theme (usar dark por defecto) */
 :root {
+  /* Colores primarios - Se definen inicialmente y se sobrescriben vía JavaScript */
   --primary-color: #3B82F6;
+  --primary-color-dark: #2563eb;
+  --primary-color-darker: #1d4ed8;
   --primary-color-text: #ffffff;
   --surface-ground: #1e1e1e;
   --surface-section: #2a2a2a;
   --surface-card: #2a2a2a;
+  --surface-hover: #3a3a3a;
+  --surface-border: #3f3f46;
   --text-color: #e0e0e0;
   --text-color-secondary: #a0a0a0;
+  --success-color: #10b981;
+  --success-color-dark: #059669;
+  --success-text: #10b981;
+  --warning-color: #f59e0b;
+  --warning-color-dark: #d97706;
+  --warning-text: #f59e0b;
+  --danger-color: #ef4444;
+  --danger-color-dark: #dc2626;
+  --danger-text: #ef4444;
+  --purple-color: #8b5cf6;
+  --purple-color-dark: #7c3aed;
+  --yellow-color: #fbbf24;
+  --gray-color: #6b7280;
+  --bg-gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --bg-gradient-page: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+  --login-card-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --login-footer-bg: rgba(59, 130, 246, 0.05);
+  --login-footer-border: rgba(59, 130, 246, 0.1);
+  --google-btn-bg: linear-gradient(135deg, #1e293b, #334155);
+  --google-btn-bg-hover: linear-gradient(135deg, #334155, #475569);
+  --google-btn-border: #475569;
+  --google-btn-text: #f1f5f9;
+  --header-title-color: #ffffff;
+  --header-description-color: rgba(255, 255, 255, 0.8);
+  --header-border-color: rgba(255, 255, 255, 0.1);
+  --header-btn-bg: rgba(255, 255, 255, 0.1);
+  --header-btn-border: rgba(255, 255, 255, 0.2);
+  --header-btn-hover-bg: rgba(255, 255, 255, 0.15);
+  --header-icon-color: #ffffff;
   --border-radius: 6px;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Reset y estilos globales */
@@ -149,12 +321,12 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4b5563;
+  background: var(--surface-border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+  background: var(--text-color-secondary);
 }
 
 /* Layout responsive helpers */
